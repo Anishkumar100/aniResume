@@ -22,7 +22,7 @@ if(loading)
   return (
     <div>
       {
-        user ? (<div className=' min-h-screen bg-gray-50'>
+        user ? (<div className=' min-h-screen overflow-hidden  bg-gray-50'>
           <Navbar/>
           <Outlet/>
         </div>) :(
