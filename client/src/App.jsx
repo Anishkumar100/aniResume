@@ -30,7 +30,7 @@ import { adminLogin } from '../app/features/adminSlice' // Import this!
 import { IndividualUser } from './pages/Admin/IndividualUser.jsx'
 
 export const App=()=> {
-
+//redux dispatch function
   const dispatch = useDispatch()
 
   // --- 1. Check for Regular User ---
