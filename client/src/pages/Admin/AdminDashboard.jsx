@@ -216,7 +216,7 @@ export const AdminDashboard = () => {
                         {/* Top: User Profile */}
                         <div className="flex justify-between items-start relative z-10">
                             <div className='flex items-center gap-3'>
-                                <div className='w-6 h-6 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md flex items-center justify-center text-white font-bold text-lg'>
+                                <div className='w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-md flex items-center justify-center text-white font-bold text-lg'>
                                     {user.initial}
                                 </div>
                                 <div className='flex flex-col'>
