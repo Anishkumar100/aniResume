@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import "tailwindcss";
+
+
+
+*{
+  font-family: "Poppins", sans-serif;
+}
+
+@layer base /*Applicable to the whole website*/
+{
+  button{
+    @apply cursor-pointer
+  }
+
+  input:not([type="checkbox"])
+  {
+    @apply outline-none focus:ring border border-red-600 focus:ring-red-500 focus:border-red-500 rounded-lg;
+  }
+
+  input::placeholder {
+  color: #9ca3af; /* A light gray */
+  font-style: italic;
+}
+
+  textarea
+  {
+    @apply outline-none focus:ring border border-red-300  focus:ring-red-500 focus:border-red-500 rounded-lg resize-none;
+  }
+}
+
