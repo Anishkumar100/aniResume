@@ -1,8 +1,8 @@
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+dotenv.config();
 
-const ai = new OpenAI({
-    apiKey: process.env.GEMINI_API,
-    baseURL: process.env.BASE_URL
-});
+// Initialize the Google AI SDK
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API);
 
-export default ai
+export default genAI;

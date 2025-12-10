@@ -1,4 +1,5 @@
-import ai from "../config/ai.js"
+// OLD: import ai from "../config/ai.js"
+import genAI from "../config/ai.js"
 import Resume from "../models/resume.js"
 
 // controller for enhancing a resume's professional Summary
@@ -11,18 +12,16 @@ export const enhanceProfessionalSummary = async (req, res) => {
             return res.status(400).json({ message: `Type something to generate the summary` })
         }
 
-        const response = await ai.chat.completions.create({
-            model: process.env.OPENAI_MODEL,
-            messages: [
-                { role: "system", content: "You Are an expert in resume writing. Your task is to enhance the professional summary of a resume. The Summary should be 3-4 sentences also highlighting the key skills, experience, and career objectives.Make it compelling and ATS-friendly. And only return text no options or anything else." },//this is the place where you tell the ai what to do
+        // OLD: const response = await ai.chat.completions.create({ ... })
+        // NEW:
+        const model = genAI.getGenerativeModel({ model: process.env.OPENAI_MODEL });
 
+        const prompt = `You Are an expert in resume writing. Your task is to enhance the professional summary of a resume. The Summary should be 3-4 sentences also highlighting the key skills, experience, and career objectives.Make it compelling and ATS-friendly. And only return text no options or anything else."\n\nOriginal: "${userContent}"`;
 
-                { role: "user", content: userContent }
-                // And this serves as the prompt
-            ]
-        })
+        const result = await model.generateContent(prompt);
+        const enhancedContent = result.response.text();
 
-        const enhancedContent = response.choices[0].message.content // syntax from gemini docs
+        // OLD: const enhancedContent = response.choices[0].message.content
 
         return res.status(200).json({ enhancedContent })
     }
@@ -44,18 +43,12 @@ export const enhanceJobDescription = async (req, res) => {
             return res.status(400).json({ message: `Type something to generate the Job Description` })
         }
 
-        const response = await ai.chat.completions.create({
-            model: process.env.OPENAI_MODEL,
-            messages: [
-                { role: "system", content: "You Are an expert in resume writing. Your task is to enhance the Job Description of a resume. The Job Description should be 2-3 sentences also highlighting the key responsibilites and achievements.Use action verbs and qualifiable results where possible.Make it compelling and ATS-friendly. And only return text no options or anything else." },//this is the place where you tell the ai what to do
+        const model = genAI.getGenerativeModel({ model: process.env.OPENAI_MODEL });
 
+        const prompt = `You Are an expert in resume writing. Your task is to enhance the Job Description of a resume. The Job Description should be 2-3 sentences also highlighting the key responsibilites and achievements.Use action verbs and qualifiable results where possible.Make it compelling and ATS-friendly. And only return text no options or anything else."\n\nOriginal: "${userContent}"`;
 
-                { role: "user", content: userContent }
-                // And this serves as the prompt
-            ]
-        })
-
-        const enhancedContent = response.choices[0].message.content // syntax from gemini docs
+        const result = await model.generateContent(prompt);
+        const enhancedContent = result.response.text();
 
         return res.status(200).json({ enhancedContent })
     }
@@ -72,155 +65,73 @@ export const enhanceJobDescription = async (req, res) => {
 export const uploadResume = async (req, res) => {
     try {
         const { resumeText, title } = req.body
+        // FIX: Standard middleware uses req.user._id
+        const userId = req.user?._id || req.userId
 
-        const userId = req.userId
+        if (!resumeText) return res.status(400).json({ message: `Missing required Fields` })
 
-        if (!resumeText) {
-            return res.status(400).json({ message: `Missing required Fields` })
-        }
+        // SWITCH TO GOOGLE SDK
+        const model = genAI.getGenerativeModel({ model: process.env.OPENAI_MODEL });
 
-        const response = await ai.chat.completions.create({
-            model: process.env.OPENAI_MODEL,
-            messages: [
-                { role: "system", content: "You are an expert AI agent to extract data from resume" },//this is the place where you tell the ai what to do
-
-
-                {
-                    role: "user", content: `extract data from this resume: ${resumeText} 
-                Provide data in the following JSON format with no additional text before or after:
-    {
-    professional_summary:
-    {
-        type:String,
-        default:""
-    },
-    skills:
-    [{
-        type:String
-    }],
-    personal_info:
-    {
-        image:{
-            type:String,
-            default:""
-        },
-        full_name:
+        // YOUR EXACT PROMPT logic
+        const prompt = `You are an expert AI agent to extract data from resume. extract data from this resume: ${resumeText} 
+        Provide data in the following JSON format with no additional text before or after:
         {
-            type:String,
-            default:""
-        },
-        profession:
-        {
-            type:String,
-            default:""
-        },
-        email:
-        {
-            type:String,
-            default:""
-        },
-        phone:
-        {
-            type:String,
-            default:""
-        },
-        location:
-        {
-            type:String,
-            default:""
-        },
-        linkedin:
-        {
-            type:String,
-            default:""
-        },
-        website:
-        {
-            type:String,
-            default:""
-        }
-    },
-    experience:[
-    {
-        company:{
-            type:String,
-        },
-        position:
-        {
-            type:String,
-        },
-        start_date:
-        {
-            type:String,
-        },
-        end_date:
-        {
-            type:String,
-        },
-        description:
-        {
-            type:String,
-        },
-        is_current:{
-            type:Boolean
-        },
-    }],
-
-    projects:[
-        {
-            name:{
-                type:String,
+            "professional_summary": { "type": "String", "default": "" },
+            "skills": [{ "type": "String" }],
+            "personal_info": {
+                "image": { "type": "String", "default": "" },
+                "full_name": { "type": "String", "default": "" },
+                "profession": { "type": "String", "default": "" },
+                "email": { "type": "String", "default": "" },
+                "phone": { "type": "String", "default": "" },
+                "location": { "type": "String", "default": "" },
+                "linkedin": { "type": "String", "default": "" },
+                "website": { "type": "String", "default": "" }
             },
-            type:
-            {
-                type:String,
-            },
-            description:
-            {
-                type:String,
-            },
+            "experience": [{
+                "company": { "type": "String" },
+                "position": { "type": "String" },
+                "start_date": { "type": "String" },
+                "end_date": { "type": "String" },
+                "description": { "type": "String" },
+                "is_current": { "type": "Boolean" }
+            }],
+            "projects": [{
+                "name": { "type": "String" },
+                "type": { "type": "String" },
+                "description": { "type": "String" }
+            }],
+            "education": [{
+                "institution": { "type": "String" },
+                "degree": { "type": "String" },
+                "field": { "type": "String" },
+                "graduation_date": { "type": "String" },
+                "gpa": { "type": "String" }
+            }]
+        }`;
+
+        const result = await model.generateContent(prompt);
+        let enhancedContent = result.response.text();
+
+        // CLEANUP: Google often adds ```json ... ``` wrapper. We must remove it.
+        enhancedContent = enhancedContent.replace(/```json/g, "").replace(/```/g, "").trim();
+
+        let parsedData = JSON.parse(enhancedContent);
+
+        // ERROR FIX: Convert AI's "Skill Objects" to "Strings" to match your DB Schema
+        // Your logs showed the AI returning [{name: "C", rating: 5}] which crashed Mongoose.
+        if (parsedData.skills && Array.isArray(parsedData.skills)) {
+            parsedData.skills = parsedData.skills.map(skill => {
+                return typeof skill === 'object' ? skill.name : skill;
+            });
         }
-    ],
 
-    education:[
-    {
-        institution:{
-            type:String,
-        },
-        degree:
-        {
-            type:String,
-        },
-        field:
-        {
-            type:String,
-        },
-        graduation_date:
-        {
-            type:String,
-        },
-        gpa:
-        {
-            type:String,
-        }
-    }
-    ]
-    }`}
-                // And this serves as the prompt
-            ],
-            response_format: { type: 'json_object' }
-            //requesting output to be in json format
-        })
-
-        const enhancedContent = response.choices[0].message.content // syntax from gemini docs
-
-        //since we are ggetting the result in json format we need to parse it
-
-        const parsedData = JSON.parse(enhancedContent)
         const newResume = await Resume.create({ userId, title, ...parsedData })
         return res.status(200).json({ resumeId: newResume._id, newResume })
     }
     catch (error) {
-        return res.status(400).json({ message: `Sorry Couldnt upload resume for now. Please try again later` })
+        console.error("Upload Error:", error); // Log exact error
+        return res.status(400).json({ message: `Sorry Couldnt upload resume for now.` })
     }
-} 
+}
