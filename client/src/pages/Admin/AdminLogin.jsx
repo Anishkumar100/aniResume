@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Mail, Lock, Loader2 } from 'lucide-react'
 import { replace, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import adminApi from "../../config/adminApi" // 👈 Use the new file
+import adminApi from "../../../config/adminApi" // 👈 Use the new file
 import { adminLogin, setAdminLoading } from '../../../app/features/adminSlice' // Import actions
 import toast from 'react-hot-toast'
 
