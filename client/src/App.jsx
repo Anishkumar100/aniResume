@@ -25,6 +25,7 @@ import { useDispatch } from 'react-redux'
 import { Toaster } from "react-hot-toast"
 
 import api from "../config/api.js"
+import adminApi from '../config/adminApi.js' // no use for this, since we use seeder
 import { login, setLoading } from '../app/features/authSlice'
 import { adminLogin } from '../app/features/adminSlice' // Import this!
 import { IndividualUser } from './pages/Admin/IndividualUser.jsx'

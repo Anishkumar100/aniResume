@@ -11,7 +11,7 @@ import {
   Globe,
   Lock
 } from 'lucide-react'
-import api from '../../../config/api'
+import adminApi from '../../../config/adminApi'
 import { Loader } from '../../components/commonComponents/Loader'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
@@ -38,8 +38,8 @@ export const IndividualUser = () => {
         const config = { headers: { 'Authorization': `Bearer ${token}` } }
 
         const [usersRes, resumesRes] = await Promise.all([
-            api.get(`/api/admin/users/${userId}`, config),
-            api.get(`/api/admin/users/${userId}/resumes`, config)
+        adminApi.get(`/api/admin/users/${userId}`, config),
+        adminApi.get(`/api/admin/users/${userId}/resumes`, config)
         ])
 
         const foundUser = usersRes.data.user; 
@@ -70,7 +70,7 @@ export const IndividualUser = () => {
 
     try {
         const token = localStorage.getItem('adminToken')
-        await api.delete(`/api/admin/users/${userId}`, { 
+        await adminApi.delete(`/api/admin/users/${userId}`, { 
             headers: { 'Authorization': `Bearer ${token}` } 
         })
         toast.success("User deleted successfully")
@@ -86,7 +86,7 @@ export const IndividualUser = () => {
 
     try {
         const token = localStorage.getItem('adminToken')
-        await api.delete(`/api/admin/resumes/${resumeId}`, { 
+        await adminApi.delete(`/api/admin/resumes/${resumeId}`, { 
             headers: { 'Authorization': `Bearer ${token}` } 
         })
         setResumes(prev => prev.filter(r => r._id !== resumeId))

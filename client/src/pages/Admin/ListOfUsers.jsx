@@ -10,7 +10,7 @@ import {
   ShieldAlert
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import api from '../../../config/api'
+import adminApi from '../../../config/adminApi'
 import { Loader } from '../../components/commonComponents/Loader'
 import toast from 'react-hot-toast'
 
@@ -28,8 +28,8 @@ export const ListOfUsers = () => {
 
         // Fetch Users AND Resumes (to calculate counts)
         const [usersRes, resumesRes] = await Promise.all([
-          api.get('/api/admin/users', config),
-          api.get('/api/admin/resumes', config)
+          adminApi.get('/api/admin/users', config),
+          adminApi.get('/api/admin/resumes', config)
         ])
 
         const rawUsers = usersRes.data.users || []
@@ -75,7 +75,7 @@ export const ListOfUsers = () => {
 
     try {
       const token = localStorage.getItem('adminToken')
-      await api.delete(`/api/admin/users/${userId}`, {
+      await adminApi.delete(`/api/admin/users/${userId}`, {
         headers: { 'Authorization': `Bearer ${token}` }
       })
 

@@ -10,7 +10,7 @@ import {
   Globe
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import api from '../../../config/api'
+import adminApi from "../../../config/adminApi" 
 import { Loader } from '../../components/commonComponents/Loader'
 import toast from 'react-hot-toast'
 
@@ -24,7 +24,7 @@ export const ListOfResumes = () => {
     const loadResumes = async () => {
       try {
         const token = localStorage.getItem('adminToken')
-        const { data } = await api.get('/api/admin/resumes', {
+        const { data } = await adminApi.get('/api/admin/resumes', {
             headers: { 'Authorization': `Bearer ${token}` }
         })
         setResumes(data.resumes || [])
@@ -44,7 +44,7 @@ export const ListOfResumes = () => {
 
     try {
         const token = localStorage.getItem('adminToken')
-        await api.delete(`/api/admin/resumes/${resumeId}`, {
+        await adminApi.delete(`/api/admin/resumes/${resumeId}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         })
 

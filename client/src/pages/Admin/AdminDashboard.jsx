@@ -10,7 +10,7 @@ import {
   Activity,
   ShieldCheck
 } from 'lucide-react'
-import api from '../../../config/api'
+import adminApi from '../../../config/adminApi'
 import { Loader } from '../../components/commonComponents/Loader'
 
 export const AdminDashboard = () => {
@@ -33,8 +33,8 @@ export const AdminDashboard = () => {
 
         // 1. Parallel Data Fetching
         const [usersRes, resumesRes] = await Promise.all([
-          api.get('/api/admin/users', config),
-          api.get('/api/admin/resumes', config)
+          adminApi.get('/api/admin/users', config),
+          adminApi.get('/api/admin/resumes', config)
         ])
 
         const users = usersRes.data.users || []

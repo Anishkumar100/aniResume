@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Mail, Lock, Loader2 } from 'lucide-react'
 import { replace, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import api from '../../../config/api' // Your axios instance
+import adminApi from "../../config/adminApi" // 👈 Use the new file
 import { adminLogin, setAdminLoading } from '../../../app/features/adminSlice' // Import actions
 import toast from 'react-hot-toast'
 
@@ -45,7 +45,7 @@ export const AdminLogin = () => {
       dispatch(setAdminLoading(true)) // Start loading
 
       // 1. API Call
-      const { data } = await api.post('/api/admin/login', formData)
+      const { data } = await adminApi.post('/api/admin/login', formData)
 
       if (data.success) {
         // 2. Save to Redux
