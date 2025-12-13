@@ -17,7 +17,7 @@ export const loginAdmin = async (req, res) => {
         // Compare plain text password with hashed DB password
         if (admin && (await bcrypt.compare(password, admin.password))) {
             // Sign token with a specific Admin role or separate secret if desired
-            const token = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET, { expiresIn: "1d" });
+            const token = jwt.sign({ id: admin._id, role: 'admin' }, process.env.JWT_SECRET);
 
             return res.json({
                 success: true,
