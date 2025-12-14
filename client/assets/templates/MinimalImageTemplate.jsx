@@ -1,15 +1,22 @@
 import { Mail,Globe,GitBranchIcon, Phone, MapPin } from "lucide-react";
 
 const MinimalImageTemplate = ({ data, accentColor }) => {
-    const formatDate = (dateStr) => {
+   const formatDate = (dateStr) => {
         if (!dateStr) return "";
-        const [year, month] = dateStr.split("-");
-        return new Date(year, month - 1).toLocaleDateString("en-US", {
+        
+        const date = new Date(dateStr);
+        
+        // Check if the date is valid
+        if (isNaN(date.getTime())) {
+            return dateStr; // Return original text if it's not a valid date
+        }
+
+        return date.toLocaleDateString("en-US", {
             year: "numeric",
-            month: "short",
+            month: "short"
         });
     };
-
+    
     return (
         <div className="max-w-5xl mx-auto bg-white text-zinc-800">
             <div className="grid grid-cols-3">

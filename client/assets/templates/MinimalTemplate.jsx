@@ -3,13 +3,20 @@ import { GitBranchIcon, Globe } from "lucide-react";
 const MinimalTemplate = ({ data, accentColor }) => {
     const formatDate = (dateStr) => {
         if (!dateStr) return "";
-        const [year, month] = dateStr.split("-");
-        return new Date(year, month - 1).toLocaleDateString("en-US", {
+
+        const date = new Date(dateStr);
+
+        // Check if the date is valid
+        if (isNaN(date.getTime())) {
+            return dateStr; // Return original text if it's not a valid date
+        }
+
+        return date.toLocaleDateString("en-US", {
             year: "numeric",
             month: "short"
         });
     };
-
+    
     return (
         <div className="max-w-4xl mx-auto p-8 bg-white text-gray-900 font-light">
             {/* Header */}
@@ -90,10 +97,10 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                 {(proj.deployedURL || proj.repositoryURL) && (
                                     <div className="flex gap-4 text-sm text-gray-500 mb-1">
                                         {proj.deployedURL && (
-                                            <a 
-                                                href={proj.deployedURL} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer" 
+                                            <a
+                                                href={proj.deployedURL}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                                 className="flex items-center gap-1 hover:text-gray-900 transition-colors"
                                             >
                                                 <Globe size={12} />
@@ -101,10 +108,10 @@ const MinimalTemplate = ({ data, accentColor }) => {
                                             </a>
                                         )}
                                         {proj.repositoryURL && (
-                                            <a 
-                                                href={proj.repositoryURL} 
-                                                target="_blank" 
-                                                rel="noopener noreferrer" 
+                                            <a
+                                                href={proj.repositoryURL}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                                 className="flex items-center gap-1 hover:text-gray-900 transition-colors"
                                             >
                                                 <GitBranchIcon size={12} />

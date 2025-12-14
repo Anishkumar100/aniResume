@@ -1,14 +1,21 @@
 import { Mail, Phone, MapPin, Linkedin, Globe, GitBranchIcon } from "lucide-react";
 
 const ModernTemplate = ({ data, accentColor }) => {
-	const formatDate = (dateStr) => {
-		if (!dateStr) return "";
-		const [year, month] = dateStr.split("-");
-		return new Date(year, month - 1).toLocaleDateString("en-US", {
-			year: "numeric",
-			month: "short"
-		});
-	};
+   const formatDate = (dateStr) => {
+        if (!dateStr) return "";
+        
+        const date = new Date(dateStr);
+        
+        // Check if the date is valid
+        if (isNaN(date.getTime())) {
+            return dateStr; // Return original text if it's not a valid date
+        }
+
+        return date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short"
+        });
+    };
 
 	return (
 		<div className="max-w-4xl mx-auto bg-white text-gray-800">
