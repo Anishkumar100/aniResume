@@ -19,7 +19,6 @@ app.use(cors({
     origin: [
         "http://localhost:5173",
         "https://aniresume.vercel.app", // 👈 Make sure this matches your Frontend URL exactly (no trailing slash)
-        "https://ani-resume.vercel.app" // Add any other Vercel domains you have
     ],
     credentials: true, // Allows cookies/headers
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
